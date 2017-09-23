@@ -1,15 +1,10 @@
 import test from 'tape'
-import { app, snake, food, direction, ctx, score } from '../reducers'
+import reducers from '../reducers'
+const { app, snake, food, direction, ctx, score } = reducers
 
 test('reducers snake move', t => {
   const state = snake(null, { type: 'MOVE', payload: 'DOWN' })
   t.equals(state[0].y, 1)
-  t.end()
-})
-
-test('reducers snake pop', t => {
-  const state = snake(null, { type: 'POP' })
-  t.equals(state.length, 4)
   t.end()
 })
 
@@ -37,7 +32,22 @@ test('reducers direction', t => {
 })
 
 test('reducers app', t => {
-  t.deepEquals(app(), { h: 400, w: 400, size: 10 })
+  t.deepEquals(
+    app(
+      {
+        h: 400,
+        w: 400,
+        size: 10
+      },
+      { type: 'SETUP' }
+    ),
+    {
+      h: 400,
+      w: 400,
+      size: 10,
+      running: true
+    }
+  )
   t.end()
 })
 

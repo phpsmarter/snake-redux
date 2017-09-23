@@ -1,3 +1,4 @@
+import raf from 'raf'
 import randomInt from 'random-int'
 import R from 'ramda'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
@@ -9,10 +10,11 @@ import init from './init'
 import keyChange from './key-change'
 
 const { equals, pick, head } = R
-const store = createStore(combineReducers(reducers), applyMiddleware)
+const store = createStore(combineReducers(reducers), applyMiddleware(thunk))
 
 store.subscribe(function() {
-  const { snake, food, app, direction } = store.getState()
+  const state = store.getState()
+  const { snake, food, direction, app } = state
 
   // if game over stop snake
   if (
@@ -21,28 +23,29 @@ store.subscribe(function() {
     head(snake).x === app.w / app.size ||
     head(snake).y === app.h / app.size
   ) {
+    if (app.running) {
+      store.dispatch({ type: 'STOP' })
+    }
     return
   }
 
   // handle tick rules
-  if (eatFood(food, head(snake))) {
+  if (app.running && eatFood(food, head(snake))) {
     store.dispatch({ type: 'EAT', payload: createFood(app) })
-    return
-  } else {
-    store.dispatch({ type: 'POP' })
-    return
+    //return
   }
 
-  // render update
-  render(state)
-
   // update state with move every 60 milliseconds
-  setTimeout(() => {
-    store.dispatch({
-      type: 'MOVE',
-      payload: direction
-    })
-  }, 60)
+  if (app.running) {
+    setTimeout(() => {
+      // render update
+      render(state)
+      store.dispatch({
+        type: 'MOVE',
+        payload: direction
+      })
+    }, 120)
+  }
 })
 
 keyChange(store.dispatch)
@@ -56,5 +59,5 @@ function eatFood(food, snakeHead) {
 }
 
 function createFood({ h, w, size }) {
-  return { x: randomInt(0, w / size), y: randomInt(0, h / size) }
+  return { x: randomInt(0, w / size), y: randomInt(0, h / size), color: 'red' }
 }

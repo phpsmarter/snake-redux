@@ -18,10 +18,23 @@ const {
   identity
 } = R
 
-export { direction, ctx, snake, food, score, app }
+export default { direction, ctx, snake, food, score, app }
 
-function app() {
-  return { h: 400, w: 400, size: 10 }
+function app(state = { h: 400, w: 400, size: 10, running: false }, action) {
+  switch (action.type) {
+    case 'SETUP':
+      return merge(state, { running: true })
+    case 'MOVE':
+      return merge(state, { running: true })
+    case 'CHANGE':
+      return merge(state, { running: false })
+    case 'EAT':
+      return merge(state, { running: false })
+    case 'STOP':
+      return merge(state, { running: false })
+    default:
+      return state
+  }
 }
 
 function direction(state = 'RIGHT', action) {
@@ -47,7 +60,7 @@ function ctx(state = {}, action) {
   }
 }
 
-function score(state, action) {
+function score(state = 0, action) {
   switch (action.type) {
     case 'CLEAR':
       return 0
@@ -65,19 +78,31 @@ function snake(state, action) {
     always(times(i => ({ x: i, y: 0, color: 'blue' }), 5)),
     identity
   )(state)
-
+  let h = clone(head(state))
   switch (action.type) {
-    case 'POP':
-      return dropLast(1, state)
-    case 'MOVE':
-      let h = clone(head(state))
-      h = cond([
-        [equals('LEFT'), always(assoc('x', dec(h.x), h))],
-        [equals('RIGHT'), always(assoc('x'), inc(h.x), h)],
-        [equals('UP'), always(assoc('y', dec(h.y), h))],
-        [equals('DOWN'), always(assoc('y', inc(h.y), h))]
-      ])(action.payload)
+    case 'EAT':
+      if (equals('RIGHT', action.payload)) {
+        h = { x: inc(h.x), y: h.y, color: 'blue' }
+      } else if (equals('LEFT', action.payload)) {
+        h = { x: dec(h.x), y: h.y, color: 'blue' }
+      } else if (equals('UP', action.payload)) {
+        h = { x: h.x, y: dec(h.y), color: 'blue' }
+      } else if (equals('DOWN', action.payload)) {
+        h = { x: h.x, y: inc(h.y), color: 'blue' }
+      }
       return prepend(h, state)
+
+    case 'MOVE':
+      if (equals('RIGHT', action.payload)) {
+        h = { x: inc(h.x), y: h.y, color: 'blue' }
+      } else if (equals('LEFT', action.payload)) {
+        h = { x: dec(h.x), y: h.y, color: 'blue' }
+      } else if (equals('UP', action.payload)) {
+        h = { x: h.x, y: dec(h.y), color: 'blue' }
+      } else if (equals('DOWN', action.payload)) {
+        h = { x: h.x, y: inc(h.y), color: 'blue' }
+      }
+      return dropLast(1, prepend(h, state))
     case 'SET_SNAKE':
       return action.payload
     default:
@@ -87,6 +112,8 @@ function snake(state, action) {
 
 function food(state = { x: 10, y: 10, color: 'red' }, action) {
   switch (action.type) {
+    case 'EAT':
+      return action.payload
     case 'SET_FOOD':
       return merge(state, action.payload)
     default:
