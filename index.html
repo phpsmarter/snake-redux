@@ -6,12 +6,11 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" >
     <link rel="stylesheet" href="https://unpkg.com/tachyons" />
     <script src="https://unpkg.com/getlibs"></script>
+    <script type="text/javascript" src="https://rawgit.com/konvajs/konva/master/konva.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/lavrton/react-konva/master/dist/react-konva.bundle.js"></script>
   </head>
   <body class="pa4 bg-black-80 pink">
-    <h1 class="avenir tc mb2 ttu tracked">Snake</h1>
-    <div class="flex items-center">
-      <canvas height=400 width=400 class="center"></canvas>
-    </div>
+    <div id="app" />
     <script>
     System.import('./index.js')
 </script>

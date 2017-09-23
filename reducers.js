@@ -18,7 +18,7 @@ const {
   identity
 } = R
 
-export default { direction, ctx, snake, food, score, app }
+export default { direction, snake, food, score, app }
 
 function app(state = { h: 400, w: 400, size: 10, running: false }, action) {
   switch (action.type) {
@@ -46,15 +46,6 @@ function direction(state = 'RIGHT', action) {
         [equals(39), always('RIGHT')],
         [equals(40), always('DOWN')]
       ])(action.payload)
-    default:
-      return state
-  }
-}
-
-function ctx(state = {}, action) {
-  switch (action.type) {
-    case 'SETUP':
-      return action.payload
     default:
       return state
   }
