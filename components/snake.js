@@ -17,7 +17,6 @@ const part = cell => (
 )
 
 const Snake = props => {
-  console.log(props.snake)
   return <Group>{map(part, props.snake)}</Group>
 }
 const connector = connect(state => {
