@@ -1,0 +1,27 @@
+{
+  "name": "snake-fp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "pushstate-server": "^3.0.1"
+  },
+  "scripts": {
+    "start": "pushstate-server . 4000",
+    "test": "NODE_ENV=test babel-tape-runner test/**/*test.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-tape-runner": "^2.0.1",
+    "tape": "^4.8.0"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": ["env"]
+      }
+    }
+  }
+}
