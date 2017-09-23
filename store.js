@@ -37,8 +37,6 @@ store.subscribe(function() {
   // update state with move every 60 milliseconds
   if (app.running) {
     setTimeout(() => {
-      // render update
-      // render(state)
       store.dispatch({
         type: 'MOVE',
         payload: direction

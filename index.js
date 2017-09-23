@@ -15,4 +15,5 @@ ReactDOM.render(
 
 keyChange(store.dispatch)
 
+// start game
 store.dispatch({ type: 'SETUP' })

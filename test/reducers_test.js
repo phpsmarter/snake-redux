@@ -1,6 +1,6 @@
 import test from 'tape'
 import reducers from '../reducers'
-const { app, snake, food, direction, ctx, score } = reducers
+const { app, snake, food, direction, score } = reducers
 
 test('reducers snake move', t => {
   const state = snake(null, { type: 'MOVE', payload: 'DOWN' })
@@ -48,10 +48,5 @@ test('reducers app', t => {
       running: true
     }
   )
-  t.end()
-})
-
-test('reducers ctx', t => {
-  t.equals(ctx(null, { type: 'SETUP', payload: 'foo' }), 'foo')
   t.end()
 })
